@@ -60,7 +60,7 @@ int main()
 {
     float frame = 0;
     srand(time(NULL));
-    sf::RenderWindow window(sf::VideoMode(1800, 1500), L"Vselennaya");
+    sf::RenderWindow window(sf::VideoMode(1800, 1500), L"NEDOvselennaya");
     window.setVerticalSyncEnabled(true);
     sf::VertexArray Point(sf::Points, 500);
     for (int i = 0; i < 500; i++)
@@ -201,5 +201,5 @@ int main()
         window.draw(asteroid);
         window.display();
     }
-    return 0;
+    return 0; 
 }

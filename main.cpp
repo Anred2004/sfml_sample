@@ -2,8 +2,60 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "Header.hpp"
-using namespace sf;
-
+namespace pp
+{
+    Vselennaya::Vselennaya(int x0, int y0, int spacing, int vector)
+    {
+        if (vector > 1)
+        {
+            vector = 1;
+        }
+        if (vector < -1 || vector == 0)
+        {
+            vector = -1;
+        }
+        m_vector = vector;
+        m_x0 = x0;
+        m_y0 = y0;
+        m_spacing = spacing;
+    }
+    Vselennaya::Vselennaya(int spacing, int vector)
+    {
+        if (vector > 1)
+        {
+            vector = 1;
+        }
+        if (vector < -1 || vector == 0)
+        {
+            vector = -1;
+        }
+        m_vector = vector;
+        m_spacing = spacing;
+    }
+    int Vselennaya::getX()
+    {
+        return m_x;
+    }
+    int Vselennaya::getY()
+    {
+        return m_y;
+    }
+    void Vselennaya::moving(double vrash)
+    {
+        m_angle += vrash;
+        if (m_angle > 360)
+        {
+            m_angle = 0;
+        }
+        m_x = m_x0 + m_spacing * cos(m_angle * M_PI / 180);
+        m_y = m_y0 + m_spacing * sin(m_angle * M_PI / 180) * m_vector;
+    }
+    void Vselennaya::setposition(int x0, int y0)
+    {
+        m_x0 = x0;
+        m_y0 = y0;
+    }
+}
 int main()
 {
     float frame = 0;
@@ -13,69 +65,69 @@ int main()
     sf::VertexArray Point(sf::Points, 500);
     for (int i = 0; i < 500; i++)
     {
-        Point[i].position = Vector2f(rand() % 1800, rand() % 1500);
+        Point[i].position = sf::Vector2f(rand() % 1800, rand() % 1500);
     }
     // Объявление планет солнце, меркурий, венера, земля, марс, луна
-    CircleShape Sun(100.f), Mercury(6), Venus(14), Earth(15), Mars(7), Jupiter(55), Saturn(45), Uranus(40), Neptune(35), Moon(2);
+    sf::CircleShape Sun(100.f), Mercury(6), Venus(14), Earth(15), Mars(7), Jupiter(55), Saturn(45), Uranus(40), Neptune(35), Moon(2);
     Sun.setPosition(900, 750);
     Sun.setOrigin(100, 100);
-    Texture textureSun;
+    sf::Texture textureSun;
     textureSun.loadFromFile("sun.png");
     Sun.setTexture(&textureSun);
 
-    Texture textureEarth;
+    sf::Texture textureEarth;
     textureEarth.loadFromFile("earth.png");
     Earth.setTexture(&textureEarth);
     Earth.setOrigin(15, 15);
 
-    Texture textureMercury;
+    sf::Texture textureMercury;
     textureMercury.loadFromFile("mercury.png");
     Mercury.setTexture(&textureMercury);
     Mercury.setOrigin(6, 6);
 
-    Texture textureVenus;
+    sf::Texture textureVenus;
     textureVenus.loadFromFile("venus.png");
     Venus.setTexture(&textureVenus);
     Venus.setOrigin(14, 14);
 
-    Texture textureMars;
+    sf::Texture textureMars;
     textureMars.loadFromFile("mars.png");
     Mars.setTexture(&textureMars);
     Mars.setOrigin(7, 7);
 
-    Texture textureJupiter;
+    sf::Texture textureJupiter;
     textureJupiter.loadFromFile("jupiter.png");
     Jupiter.setTexture(&textureJupiter);
     Jupiter.setOrigin(55, 55);
 
-    Texture textureUranus;
+    sf::Texture textureUranus;
     textureUranus.loadFromFile("uran.png");
     Uranus.setTexture(&textureUranus);
     Uranus.setOrigin(40, 40);
 
-    Texture textureNeptune;
+    sf::Texture textureNeptune;
     textureNeptune.loadFromFile("neptune.png");
     Neptune.setTexture(&textureNeptune);
     Neptune.setOrigin(35, 35);
 
-    Texture textureSaturn;
+    sf::Texture textureSaturn;
     textureSaturn.loadFromFile("saturn.png");
     Saturn.setTexture(&textureSaturn);
     Saturn.setOrigin(45, 45);
 
-    Texture textureMoon;
+    sf::Texture textureMoon;
     textureMoon.loadFromFile("luna.png");
     Moon.setTexture(&textureMoon);
     Moon.setOrigin(2, 2);
 
 
-    Image image;
+    sf::Image image;
     image.loadFromFile("asteroid.png");
-    Texture texture;
+    sf::Texture texture;
     texture.loadFromImage(image);
-    Sprite asteroid;
+    sf::Sprite asteroid;
     asteroid.setTexture(texture);
-    asteroid.setTextureRect(IntRect(0, 0, 400, 150));
+    asteroid.setTextureRect(sf::IntRect(0, 0, 400, 150));
     asteroid.setPosition(300, 300);
 
     // Создаём объекты определения координат планет
@@ -88,16 +140,16 @@ int main()
     pp::Vselennaya Uranus1(900, 750, 550, -1);
     pp::Vselennaya Neptune1(900, 750, 700, -1);
     pp::Vselennaya Moon1(30, -1);
-    Clock clock;
+    sf::Clock clock;
     while (window.isOpen())
     {
         float time = clock.getElapsedTime().asSeconds();
         clock.restart();
         time = time / 0.001;
-        Event event;
+        sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == Event::Closed)
+            if (event.type == sf::Event::Closed)
             {
                 window.close();
             }
@@ -121,8 +173,6 @@ int main()
         Moon1.setposition(Earth.getPosition().x, Earth.getPosition().y);
         Moon1.moving(2);
         Moon.setPosition(Moon1.getX(), Moon1.getY());
-
-
 
         Sun.rotate(-0.05);
         Mercury.rotate(-1);

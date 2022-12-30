@@ -201,5 +201,5 @@ int main()
         window.draw(asteroid);
         window.display();
     }
-    return 0; 
+    return 0; //конец!!!
 }

@@ -1,0 +1,170 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+struct xy
+{
+	int numb;
+	string str;
+};
+class Practical
+{
+private:
+
+	vector<xy>Vector;
+	vector<int>Key;
+	vector<int>Dekey;
+	int Fib[100];
+
+
+public:
+
+	void fibonachi(int m)
+	{
+		for (int i = 1; i < m; i++)
+		{
+			if (i == 0)
+			{
+				Fib[i] = 0;
+			}
+			else if ((i == 1) || (i == 2))
+			{
+				Fib[i] = 1;
+			}
+			else
+			{
+				Fib[i] = Fib[i - 1] + Fib[i - 2];
+			}
+		}
+
+	}
+	void read()
+	{
+		fibonachi(20);
+		ifstream fin("input.txt");
+		ofstream fout("output.txt");
+		string word;
+		int i = 2;
+		while (fin >> word)
+		{
+			xy s;
+			s.numb = Fib[i];
+			s.str = word;
+			Vector.push_back(s);
+			i++;
+		}
+
+		for (int i = 0; i < Vector.size(); i++)
+		{
+			fout << Vector[i].numb << " " << Vector[i].str << endl;
+		}
+	}
+
+	void incode()
+	{
+		read();
+		int k = 0;
+		string encodeStr[100];
+		int sym = 0;
+		int size = 0;
+		cin >> size;
+		for (int i = 0; i < size; i++)
+		{
+			cin >> sym;
+			Key.push_back(sym);
+		}
+
+		for (int i = 0; i < Key.size(); i++)
+		{
+			for (int j = 0; j < Key.size(); j++)
+			{
+				if (Vector[i].numb == Key[j])
+				{
+					k++;
+				}
+			}
+		}
+		if (Vector.size() != Key.size())
+		{
+			cout << "Error1" << endl;
+		}
+		else if (k != Key.size())
+		{
+			cout << "Error2 " << endl;
+		}
+		else
+		{
+			for (int j = 0; j < Vector.size(); j++)
+			{
+				for (int i = 0; i < Vector.size(); i++)
+				{
+					if (Vector[i].numb == Key[j])
+					{
+						
+						encodeStr[j] = Vector[i].str;
+						
+					}
+
+				}
+			}
+			for (int i = 0; i < Vector.size(); i++)
+			{
+				cout << encodeStr[i] << endl;
+				
+			}
+			cout << endl;
+		}
+
+	}
+	void decode()
+	{
+		ifstream fin("input.txt");
+		ofstream fout("output.txt");
+		incode();
+		string decodeStr[100];
+		
+		for (int i = 0; i < Vector.size(); i++)
+		{
+			for (int j = 0; j < Vector.size(); j++)
+			{
+				if (Key[i] < Key[j])
+				{
+					swap(Key[j], Key[i]);
+					Key[j] = Key[j];
+				}
+			}
+		}
+
+		for (int j = 0; j < Vector.size(); j++)
+		{
+			for (int i = 0; i < Vector.size(); i++)
+			{
+				if (Vector[i].numb == Key[j])
+				{
+					
+					decodeStr[j] = Vector[i].str;
+					
+				}
+
+			}
+		}
+
+		for (int i = 0; i < Vector.size(); i++)
+		{
+			cout << decodeStr[i] << endl;
+		}
+
+
+
+	}
+};
+int main()
+{
+	Practical shifr;
+	//shifr.incode();
+	shifr.decode();
+	system("pause");
+
+}

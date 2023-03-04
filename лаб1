@@ -1,0 +1,59 @@
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <string>
+
+using namespace sf;
+using namespace std;
+class AnimatedText 
+{
+private:
+	string m_text;
+	int m_duration = 0;
+
+public:
+	AnimatedText(string text, int duration)
+	{
+		string m_text = text;
+		int m_duration = duration;
+	}
+
+	void split()
+	{
+
+	}
+
+
+};
+
+
+
+
+int main()
+{
+	RenderWindow window(VideoMode(400, 400), L"Новый проект", Style::Default);
+	window.setVerticalSyncEnabled(true);
+	Font font;
+	font.loadFromFile("arial.ttf");
+	Text text("", font, 40);
+	text.setFillColor(Color(100, 250, 87));
+	string str = "Hello world!";
+	Clock clock;
+
+
+
+	while (window.isOpen())
+	{
+		Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == Event::Closed)
+				window.close();
+		}
+		text.setString("String");
+		text.setPosition(250, 250);
+		window.clear(Color::Black);
+		window.draw(text);
+		window.display();
+	}
+	return 0;
+}

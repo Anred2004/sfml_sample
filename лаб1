@@ -1,59 +1,94 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
-
 using namespace sf;
 using namespace std;
-class AnimatedText 
+class AnimatedText
 {
+
 private:
 	string m_text;
-	int m_duration = 0;
+	string tmpText = "";
+	float m_duration;
+	int countSimb;
+	float timeSimb;
+	float timeElapsed;
+	int showSimb;
+	Clock clock;
+	Font font;
+	Text message;
 
 public:
-	AnimatedText(string text, int duration)
+	AnimatedText()
 	{
-		string m_text = text;
-		int m_duration = duration;
+		message.setFont(font);
+		message.setString("");
+		message.setCharacterSize(24);
+		showSimb = 0;
+
 	}
 
-	void split()
+	AnimatedText(const float duration, const string text)
 	{
+		message.setFont(font);
+		message.setString("");
+		message.setCharacterSize(24);
+		showSimb = 0;
+		setDuration(duration);
+		setText(text);
+		
 
+	}
+	
+	void setText(const string text)
+	{
+		m_text = text;
+		countSimb = text.length();
+		timeSimb = m_duration / countSimb;
+	}
+	void setDuration(const float duration)
+	{
+		m_duration = duration;
+		timeSimb = duration / countSimb;
+	}
+	void shrift()
+	{
+		font.loadFromFile("arial.ttf");
+		message.setPosition(100.f, 100.f);
+	}
+
+	void draw()
+	{
+		RenderWindow window(VideoMode(800, 600), "Animated Text");
+		Event event;
+		while (window.isOpen()) {
+			while (window.pollEvent(event))
+			{
+				if (event.type == Event::Closed)
+					window.close();
+	
+			}
+			float timeElapsed = clock.getElapsedTime().asSeconds();
+
+			if ((timeElapsed > timeSimb) && (showSimb < countSimb))
+			{
+				tmpText += m_text[showSimb];
+				message.setString(tmpText);
+
+				showSimb++;//увеличиваем кол-во отображаемых символов
+				clock.restart();
+			}
+
+			window.clear();
+			window.draw(message);
+			window.display();
+		}
 	}
 
 
 };
-
-
-
-
 int main()
 {
-	RenderWindow window(VideoMode(400, 400), L"Новый проект", Style::Default);
-	window.setVerticalSyncEnabled(true);
-	Font font;
-	font.loadFromFile("arial.ttf");
-	Text text("", font, 40);
-	text.setFillColor(Color(100, 250, 87));
-	string str = "Hello world!";
-	Clock clock;
 
-
-
-	while (window.isOpen())
-	{
-		Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == Event::Closed)
-				window.close();
-		}
-		text.setString("String");
-		text.setPosition(250, 250);
-		window.clear(Color::Black);
-		window.draw(text);
-		window.display();
-	}
-	return 0;
+	AnimatedText AnimatedText1(13, "Hello world!");
 }

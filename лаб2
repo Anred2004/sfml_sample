@@ -1,0 +1,183 @@
+#pragma warning(disable: 4996)
+#include <iostream>
+#include <cstring>
+
+struct String
+{
+private:
+	unsigned int m_size;
+	char* m_str;//динамический массив
+	friend std::ostream& operator <<(std::ostream& out, String& str);
+	friend std::istream& operator >> (std::istream& in, String& str);
+public:
+	// базовый конструктор
+	String()
+	{
+		m_str = nullptr;
+		m_size = 0;
+	}
+	//конструктор копирования
+	String(char* str)
+	{
+		m_size = strlen(str);
+		m_str = new char[m_size + 1];
+		std::copy(str, str + m_size + 1, m_str);
+	}
+	String(char c, int size)
+	{
+		m_size = size;
+		m_str = new char[m_size + 1];
+		for (int i = 0; i < m_size; i++) {
+			m_str[i] = c;
+		}
+	}
+	// оператор присваивания
+	String& operator=(String& a)
+	{
+		std::swap(m_str, a.m_str);
+		std::swap(m_size, a.m_size);
+		return *this;
+	}
+	//оператор +=
+	String& operator+=(const String& a)
+	{
+		char* newStr = new char[m_size + a.m_size + 1];
+		std::copy(m_str, m_str + m_size, newStr);
+		std::copy(a.m_str, a.m_str + a.m_size + 1, newStr + m_size);
+		delete[] m_str;
+		m_str = newStr;
+		m_size = strlen(m_str);
+		return *this;
+	}
+	// оператор +
+	String operator+(const String& b)
+	{
+		char* newStr = new char[m_size + b.m_size + 1];
+		std::copy(m_str, m_str + m_size, newStr);
+		std::copy(b.m_str, b.m_str + b.m_size + 1, newStr + m_size);
+		return newStr;
+	}
+	// оператор чтения и изменения элемента
+	char operator[](int a)
+	{
+		return m_str[a];
+	}
+	//операторы <, >, ==
+	bool operator >(String& b)
+	{
+		return std::strcmp(m_str, b.m_str) > 0;
+	}
+	bool operator <(String& b)
+	{
+		return std::strcmp(m_str, b.m_str) < 0;
+	}
+	bool operator ==(String& b)
+	{
+		return std::strcmp(m_str, b.m_str) == 0;
+	}
+	//деструктор
+	~String()
+	{
+		delete[] m_str;//освобождаем память под строку
+	}
+	// метод length
+	int length() const
+	{
+		return m_size;
+	}
+	// метод find()
+	int find(char sym)
+	{
+		for (int i = 0; i < m_size; i++)
+		{
+			if (m_str[i] == sym)
+			{
+				return i;
+			}
+
+		}
+		return -1;
+	}
+	//метод c_str()
+	char* c_str()
+	{
+		return m_str;
+	}
+	// метод at()
+	char at(int number)
+	{
+		if ((number >= 0) && (number <= (m_size - 1)))
+		{
+			return m_str[number];
+		}
+		return '\0';
+
+	}	
+};
+
+std::ostream& operator <<(std::ostream& out, String& str)
+{
+	for (int i = 0; i < str.m_size; i++)
+	{
+		out << str.m_str[i];
+
+	}
+	out << std::endl;
+	return out;
+}
+std::istream& operator >> (std::istream& in, String& str)
+{
+	char str1;
+	char* s;
+	while (in.get(str1)) 
+	{
+
+		if ((str1 == '\n') || (str1 == '\0'))
+		{
+			break;
+		}
+		s = new char[str.m_size];
+		for (int i = 0; i < str.m_size; i++)
+		{
+			s[i] = str.m_str[i];
+		}
+		str.m_size++;
+		if (str.m_str != nullptr)
+		{
+			delete[] str.m_str;
+		}
+		str.m_str = new char[str.m_size];
+		for (int i = 0; i < str.m_size-1; i++)
+		{
+			str.m_str[i] = s[i];
+		}
+		str.m_str[str.m_size - 1] = str1;
+		delete[] s;
+
+	}
+	
+	return in;
+}
+
+
+int main()
+{
+	String s;
+	std::cin >> s;
+	std::cout << s;
+	String S("Hello world!!!");
+	String s2("vova");
+	String s4("sleep");
+	String s3 = S + s2;
+	std::cout << s3;
+	std::cout << S[2] << std::endl;
+	std::cout << (s4 += s2);
+	std::cout << (S < s3) << std::endl;
+	std::cout << (s4 > s3) << std::endl;
+	std::cout << (s4 == s3) << std::endl;
+	std::cout << S.find('w') << std::endl;
+	std::cout << S.length() << std::endl;
+	std::cout << S.at(1) << std::endl;
+	std::cout << S.c_str() << std::endl;
+	system("pause");
+}

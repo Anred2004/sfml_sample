@@ -1,0 +1,122 @@
+#include <iostream> 
+using namespace std;
+
+class Complex 
+{
+private:
+	double a;
+	double b;
+
+	friend std::ostream& operator << (std::ostream& out, const Complex& z);
+	friend std::istream& operator >> (std::istream& in, Complex& z);
+public:
+	// базовый конструктор 
+	Complex() 
+	{
+		a = 0.0;
+		b = 0.0;
+	}
+
+	Complex(double c, double d) 
+	{
+		a = c;
+		b = d;
+	}
+
+	// конструктор копирования 
+	Complex(const Complex& z) 
+	{
+		a = z.a;
+		b = z.b;
+	}
+
+	// оператор присваивания 
+	Complex& operator=(Complex z) 
+	{
+		swap(a, z.a);
+		swap(b, z.b);
+		return *this;
+	}
+
+	// оператор +=
+	Complex& operator+=(const Complex& z) 
+	{
+		(*this).a += z.a;
+		(*this).b += z.b;
+		return *this;
+	}
+
+	// оператор +
+	Complex operator+(const Complex& z)
+	{
+		Complex number;
+		number.a = a + z.a;
+		number.b = b + z.b;
+		return number;
+	}
+	// оператор *=
+	Complex& operator *= (const Complex& z)
+	{
+		Complex number = *this;
+		number.a = a * z.a - b * z.b;
+		number.b = a * z.b + b * z.a;
+		(*this).a = number.a;
+		(*this).b = number.b;
+		return *this;
+	}
+	// оператор *
+	Complex operator*(const Complex& z)
+	{
+		Complex number= *this;
+		number *= z;
+		return number;
+	}
+	// префиксный оператор
+	Complex& operator++() 
+	{
+		a++;
+		return *this;
+	}
+
+	// постфиксный оператор
+	Complex operator++(int) 
+	{
+		Complex number(*this); // создаем копию
+		a++; // увеличиваем значение
+		return number;
+	}
+};
+
+ostream& operator << (ostream& out, const Complex& z) 
+{
+	out << z.a << "+" << z.b << "i";
+	return out;
+}
+
+istream& operator >> (istream& in, Complex& z) 
+{
+	in >> z.a;
+	in >> z.b;
+	return in;
+}
+
+int main() {
+	Complex z1(1, 2);
+	Complex z2(2, 3);
+	Complex z6(2, 3);
+	Complex z7(4, 5);
+	Complex z8(2, 3);
+	Complex z9(4, 5);
+	Complex z4 = ++z2;
+	Complex z3 = z1++;
+	cout << (z6 + z7) << endl;
+	cout << (z6 += z7) << endl;
+	cout << (z8 * z9) << endl;
+	cout << (z8 *= z9) << endl;
+	cout << z2 << endl;
+	cout << z4 << endl;
+	cout << z1 << endl;
+	cout << z3 << endl;
+	
+	
+}

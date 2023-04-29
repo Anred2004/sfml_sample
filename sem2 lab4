@@ -1,0 +1,17 @@
+#include <iostream> 
+#include <vector>
+using namespace std;
+
+class Vector_Bool
+{
+private:
+
+public:
+
+};
+
+int main()
+{
+	
+	
+}

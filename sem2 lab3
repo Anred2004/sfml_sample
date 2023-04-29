@@ -1,7 +1,7 @@
 #include <iostream> 
 using namespace std;
 
-class Complex 
+class Complex
 {
 private:
 	double a;
@@ -11,27 +11,27 @@ private:
 	friend std::istream& operator >> (std::istream& in, Complex& z);
 public:
 	// базовый конструктор 
-	Complex() 
+	Complex()
 	{
 		a = 0.0;
 		b = 0.0;
 	}
 
-	Complex(double c, double d) 
+	Complex(double c, double d)
 	{
 		a = c;
 		b = d;
 	}
 
 	// конструктор копирования 
-	Complex(const Complex& z) 
+	Complex(const Complex& z)
 	{
 		a = z.a;
 		b = z.b;
 	}
 
 	// оператор присваивания 
-	Complex& operator=(Complex z) 
+	Complex& operator=(Complex z)
 	{
 		swap(a, z.a);
 		swap(b, z.b);
@@ -39,7 +39,7 @@ public:
 	}
 
 	// оператор +=
-	Complex& operator+=(const Complex& z) 
+	Complex& operator+=(const Complex& z)
 	{
 		(*this).a += z.a;
 		(*this).b += z.b;
@@ -67,19 +67,19 @@ public:
 	// оператор *
 	Complex operator*(const Complex& z)
 	{
-		Complex number= *this;
+		Complex number = *this;
 		number *= z;
 		return number;
 	}
 	// префиксный оператор
-	Complex& operator++() 
+	Complex& operator++()
 	{
 		a++;
 		return *this;
 	}
 
 	// постфиксный оператор
-	Complex operator++(int) 
+	Complex operator++(int)
 	{
 		Complex number(*this); // создаем копию
 		a++; // увеличиваем значение
@@ -87,13 +87,21 @@ public:
 	}
 };
 
-ostream& operator << (ostream& out, const Complex& z) 
+ostream& operator << (ostream& out, const Complex& z)
 {
-	out << z.a << "+" << z.b << "i";
+	
+	if (z.b > 0)
+	{
+		out << z.a << "+" << z.b << "i";
+	}
+	else 
+	{
+		out << z.a  << z.b << "i";
+	}
 	return out;
 }
 
-istream& operator >> (istream& in, Complex& z) 
+istream& operator >> (istream& in, Complex& z)
 {
 	in >> z.a;
 	in >> z.b;
@@ -107,16 +115,19 @@ int main() {
 	Complex z7(4, 5);
 	Complex z8(2, 3);
 	Complex z9(4, 5);
+	Complex z0;
+	cin >> z0;
 	Complex z4 = ++z2;
 	Complex z3 = z1++;
 	cout << (z6 + z7) << endl;
 	cout << (z6 += z7) << endl;
 	cout << (z8 * z9) << endl;
 	cout << (z8 *= z9) << endl;
+	cout << (z0 + z0) << endl;
 	cout << z2 << endl;
 	cout << z4 << endl;
 	cout << z1 << endl;
 	cout << z3 << endl;
-	
-	
+	system("pause");
+
 }

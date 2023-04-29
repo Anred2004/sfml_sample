@@ -1,17 +1,225 @@
 #include <iostream> 
-#include <vector>
 using namespace std;
 
-class Vector_Bool
-{
-private:
-
-public:
-
+template< typename I, int P, int Q>
+struct Maxrix2 {
+	I matrix[P][Q];
 };
 
-int main()
+
+template<typename T, int N, int M>
+class Matrix
 {
+private:
+	T matrix[N][M];
+	int m_n, m_m;
+	//friend ostream& operator <<(ostream& out, const Matrix& MX);
+	//friend istream& operator >> (istream& in, Matrix& MX);
 	
+public:
+	/*void Print()
+	{
+		for (int i = 0; i < N; i++)
+		{
+			for (int j = 0; j < M; j++)
+			{
+				cout << matrix[i][j]<< " ";
+			}
+			cout << endl;
+		}
+	}
+	void Read()
+	{	for (int i = 0; i < N; i++)
+			{
+				for (int j = 0; j < M; j++)
+				{
+					cin >>  matrix[i][j];
+				}
+			}
+	}*/
 	
+	Matrix() 
+	{
+		m_n = N;
+		m_m = M;
+		for (int i = 0; i < m_n; i++)
+		{
+			for (int j = 0; j < m_m; j++)
+			{
+
+				matrix[i][j] = 0;
+			}
+		}
+	}
+	// копирование
+	Matrix(const Matrix& other)
+	{ 
+		m_n = N;
+		m_m = M;
+		if (m_n == other.m_n || m_m == other.m_m)
+		{
+			for (int i = 0; i < m_n; i++)
+			{
+				for (int j = 0; j < m_m; j++)
+				{
+
+					matrix[i][j] = other.matrix[i][j];
+				}
+			}
+		}
+		else
+		{
+			cout << "Error";
+		}
+		
+	}
+	Matrix& operator=(Matrix& other)
+	{
+		m_n = N;
+		m_m = M;
+		if (m_n != other.m_n || m_m != other.m_m)
+		{
+			cout << "Error";
+		}
+		else
+		{
+			for (int i = 0; i < m_n; i++)
+			{
+				for (int j = 0; j < m_m; j++)
+				{
+					swap(matrix[i][j], other.matrix[i][j]);
+				}
+			}
+			return *this;
+		}
+	}
+	// оператор +=
+	Matrix& operator+=(Matrix& other)
+	{
+		m_n = N;
+		m_m = M;
+		if (m_n != other.m_n || m_m != other.m_m)
+		{
+			cout << "Error";
+		}
+		else
+		{
+			for (int i = 0; i < m_n; i++)
+			{
+				for (int j = 0; j < m_m; j++)
+				{
+					matrix[i][j] = other.matrix[i][j] + matrix[i][j];
+				}
+			}
+			return *this;
+		}
+	}
+	// оператор +
+	Matrix operator+(Matrix& other)
+	{
+		m_n = N;
+		m_m = M;
+		Matrix matrix1;
+		for (int i = 0; i < m_n; i++)
+		{
+			for (int j = 0; j < m_m; j++)
+			{
+				matrix1.matrix[i][j] = matrix[i][j] + other.matrix[i][j];
+			}
+		}
+		return matrix1;
+	}
+
+	Matrix& operator++(int)
+	{
+		for (int i = 0; i < m_n; i++)
+		{
+			for (int j = 0; j < m_m; j++)
+			{
+				matrix[i][j]++;
+			}
+		}
+		return *this;
+		
+	}
+
+	template<typename I, int P, int Q>
+	Matrix& operator *= (const Matrix& other<I,P,Q>)
+	{
+		m_n = N;
+		m_m = M;
+		Matrix sum(N, Q);
+		int k = 0;
+		if (M != P)
+		{
+			cout << "Error";
+		}
+		else
+		{
+			for (int i = 0; i < N; i++)
+			{
+				for (int j = 0; j < Q; j++)
+				{
+					for (int k = 0; k < M; k++)
+					{
+						sum[i][j] += matrix[i][k] * other.getter(k, j);
+					}
+				}
+			}
+		}
+		return sum;
+	}
+
+	T getter(int i, int j) {
+		return matrix[i][j];
+	}
+
+	friend istream& operator >> (istream& in, Matrix& MX)
+	{
+		for (int i = 0; i < MX.m_n; i++)
+		{
+			for (int j = 0; j < MX.m_m; j++)
+			{
+				in >> MX.matrix[i][j];
+			}
+		}
+		return in;
+	}
+
+	friend ostream& operator << (ostream& out, const Matrix& MX)
+	{
+		for (int i = 0; i < MX.m_n; i++)
+		{
+			for (int j = 0; j < MX.m_m; j++)
+			{
+				out << MX.matrix[i][j] << " ";
+			}
+			cout << endl;
+		}
+		return out;
+	}
+	
+};
+
+
+
+
+
+int main() 
+{
+	Matrix<int, 2, 2> M;
+	Matrix<int, 2, 2> C;
+	Matrix<int, 2, 2> K;
+	cin >> M;
+	cin >> K;
+	//C = M;
+	//cout << C;
+	cout << (M*=M);
+
+	//M.Read();
+	//C.Read();
+	//M.Print();
+	//C.Print();
+	system("pause");
+
 }

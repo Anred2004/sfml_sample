@@ -1,0 +1,62 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+enum class Log_level
+{
+    INFO,
+    DEBUG,
+    ERROR
+};
+class Logger
+{
+private:
+    static ofstream m_out;
+    static Log_level m_loglevel;
+public:
+    static void setLogLevel(Log_level loglevel)
+    {
+        m_loglevel = loglevel;
+    }
+    static void setLog(const string& path)
+    {
+        m_out.open(path);
+    }
+    static void Write(const string& msg)
+    {
+        cout << msg << endl;
+        m_out << msg << endl;
+    }
+    static void WriteInfo(const string& msg)
+    {
+        if (m_loglevel <= Log_level::INFO)
+        {
+            Write("[INFO] " + msg);
+        }
+    }
+    static void WriteDebug(const string& msg)
+    {
+        if (m_loglevel <= Log_level::DEBUG)
+        {
+            Write("[DEBUG] " + msg);
+        }
+    }
+    static void WriteError(const string& msg)
+    {
+        if (m_loglevel <= Log_level::ERROR)
+        {
+            Write("[ERROR] " + msg);
+        }
+    }
+
+};
+ofstream Logger::m_out;
+Log_level Logger::m_loglevel;
+int main()
+{
+    Logger::setLogLevel(Log_level::INFO);//кастом логер позволяет отключить все логи вместо того, чтобы их комментировать
+    Logger::setLog("log.txt");
+    Logger::Write("Hello world");
+    Logger::WriteInfo("This is an information message");
+    Logger::WriteDebug("This is a debug message");
+    Logger::WriteError("This is an error message");
+}

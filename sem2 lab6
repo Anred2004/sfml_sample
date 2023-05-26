@@ -56,7 +56,7 @@ int main()
     Logger::setLogLevel(Log_level::INFO);//кастом логер позволяет отключить все логи вместо того, чтобы их комментировать
     Logger::setLog("log.txt");
     Logger::Write("Hello world");
-    Logger::WriteInfo("This is an information message");
-    Logger::WriteDebug("This is a debug message");
-    Logger::WriteError("This is an error message");
+    Logger::WriteInfo("This is info message");
+    Logger::WriteDebug("This is debug message");
+    Logger::WriteError("This is error message");
 }

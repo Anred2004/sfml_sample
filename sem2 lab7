@@ -1,0 +1,86 @@
+#define _USE_MATH_DEFINES 
+#include <iostream>
+#include <cmath>
+#include <vector>
+using namespace std;
+
+enum class Color
+{
+    PINK,
+    BLUE,
+    WHITE
+};
+
+class geo_Figures
+{
+protected:
+
+    double m_x, m_y = 0;
+    Color m_color;
+    vector<int> m_size;
+
+public:
+
+    geo_Figures(double x, double y, vector<int> size, Color color)
+    {
+        m_color = color;
+        m_x = x;
+        m_y = y;
+        m_size = size;
+    }
+    virtual void getArea() {};
+};
+
+class Triangle : public geo_Figures
+{
+public:
+    Triangle(double x, double y, vector<int> size, Color color) : geo_Figures(x, y, size, color) {}
+    ~Triangle() {}
+    void getArea() override
+    {
+        double p = (m_size[0] + m_size[1] + m_size[2]) / 2;
+        double area = sqrt(p * (p - m_size[0]) * (p - m_size[1]) * (p - m_size[2]));
+        cout << area << endl;
+    }
+
+};
+class Rectangle : public geo_Figures
+{
+public:
+    Rectangle(double x, double y, vector<int> size, Color color) : geo_Figures(x, y, size, color) {}
+    ~Rectangle() {}
+    void getArea() override
+    {
+        double area = m_size[0] * m_size[1];
+        cout << area << endl;
+    }
+};
+class Circle : public geo_Figures
+{
+private:
+
+    double m_radius;
+
+public:
+    Circle(double x, double y, vector<int> size, Color color, double radius) : geo_Figures(x, y, size, color)
+    {
+        m_radius = radius;
+    }
+    ~Circle() {}
+    void getArea() override
+    {
+        double area = M_PI * m_radius * m_radius;
+        cout << area << endl;
+    }
+};
+
+int main()
+{
+    Triangle triangle(0, 0, { 3, 4, 5 }, Color::PINK);
+    Rectangle rectangle(0, 0, { 5, 6 }, Color::BLUE);
+    Circle circle(0, 0, { 2 }, Color::WHITE, 5);
+    triangle.getArea();
+    rectangle.getArea();
+    circle.getArea();
+    return 0;
+}

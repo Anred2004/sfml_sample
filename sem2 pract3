@@ -1,0 +1,74 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+class KinematicSolver
+{
+private:
+
+	double m_L1;
+	double m_L2;
+	double m_alpfa;
+	double m_beta;
+
+public:
+
+	KinematicSolver(double L1, double L2)
+	{
+		m_L1 = L1;
+		m_L2 = L2;
+	}
+	
+	bool solve(double x, double y)
+	{
+		
+		double L3 = sqrt(x*x + y*y);
+		if ((L3 > m_L1 + m_L2)) 
+		{
+			cout << "L3 < L1 + L2, error" << endl;
+			return false;
+		}
+		if ((m_L1 > m_L2 + L3))
+		{
+			cout << "L1 < L2 + L3, error" << endl;
+			return false;
+		}
+		if ((m_L2 > m_L1 + L3))
+		{
+			cout << "L2 < L1 + L3, error" << endl;
+			return false;
+		}
+		double q1 = acos(x / L3); //угол между OX и L3
+		cout << q1 << endl;
+		double q2 = acos((m_L1*m_L1 - m_L2 *m_L2 + L3*L3) / (2.0 * L3*m_L1)); //угол между L3 и L1
+		//cout << (m_L1*m_L1 - m_L2 *m_L2 + L3*L3) / (2.0 * L3*m_L1) << endl;
+		m_alpfa = q1 - q2; 
+		m_beta = M_PI - acos((m_L1*m_L1 + m_L2*m_L2 - L3*L3 )/(2.0 * m_L1*m_L2));
+		return true;
+		//cout << (m_L1*m_L1 + m_L2*m_L2 - L3*L3) / (2.0 * m_L1*m_L2) << endl;
+
+	}
+	double getAlpfa()
+	{
+		return m_alpfa;
+	}
+
+	double getBeta()
+	{
+		return m_beta;
+	}
+
+};
+
+int main()
+{
+	KinematicSolver robot(5, 4);
+	if (robot.solve(3, 0)) {
+		cout << "Alpha: " << robot.getAlpfa() << endl;
+		cout << "Beta: " << robot.getBeta() << endl;
+	}
+	system("pause");
+};

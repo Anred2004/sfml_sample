@@ -1,0 +1,77 @@
+#include <iostream>
+using namespace std;
+template<typename T>
+
+class Stack
+{
+private:
+	T* stack;
+	int stackPointer; // индекс вершины стека
+	int m_size; // размер стека
+
+public:
+	Stack(int size)
+	{
+		stack = new T[size];
+		m_size = size;
+		stackPointer = -1;
+	}
+	~Stack()
+	{
+		delete[] stack;
+	}
+	int size()
+	{
+		return stackPointer + 1;
+	}
+	bool empty()
+	{
+		return stackPointer == -1;
+	}
+	void push(T element)
+	{
+		if (m_size == size())  // то есть если стек полон
+		{
+			cout << "overflow_error" << endl;
+			return;
+		}
+		stackPointer++;
+		stack[stackPointer] = element;
+	}
+	void pop()
+	{
+		if (stackPointer == -1)
+		{
+			cout << "out_of_range" << endl;
+			return;
+		}
+		stackPointer--;
+	}
+	T top()
+	{
+		if (stackPointer == -1)
+		{
+			cout << "logic_error";
+			return -1;
+		}
+		return stack[stackPointer];
+	}
+
+};
+
+int main()
+{
+	Stack<int> underVector(5);
+	cout << underVector.size() << endl;
+	underVector.push(1);
+	underVector.push(2);
+	underVector.push(3);
+	underVector.push(4);
+	underVector.push(5);
+	cout << "size of stack: " << underVector.size() << endl;
+	underVector.push(6);
+	cout << "empty stack: " << underVector.empty() << endl;
+	underVector.pop();
+	cout << "stackPointer element: " << underVector.top() << endl;
+	system("pause");
+}
